@@ -1,4 +1,5 @@
 const express = require("express");
+const { default: mongoose } = require("mongoose");
 const coursSchema = require("../models/cours");
 const gestionMateriel = require("../models/gestionMateriel");
 const section = require("../models/section");
@@ -71,6 +72,88 @@ router.get('/listeCoursMS', (req, res) => {
                 }
             },
             /* { $match: { code:"L001" }}, */
+            {
+                $lookup: {
+                    from: "sections",
+                    as: "Sections",
+                    let: { idCours: "$_id" }, // _id is from Cours
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {
+                                            $eq: [ "$idParent","$$idCours" ] //idParent is from sections
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "sections",
+                                as: "SousSections",
+                                let: { typeSection: "Section" }, //Type de Section
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [ "$typeParent", "$$typeSection" ] //idParentSections is from gestionmateriels table
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "gestionmateriels",
+                                            as: "Materiels",
+                                            let: { idSection: "$_id" }, //_id is from Sections
+                                            pipeline: [
+                                                {
+                                                    $match: {
+                                                        $expr: {
+                                                            $and: [
+                                                                {
+                                                                    $eq: [ "$idParentSection", "$$idSection" ] //idParentSections is from gestionmateriels table
+                                                                }
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ])
+        .then((data) => res.json(data))
+        .catch((error) => res.json({ message: error }))
+})
+
+//Materiel et Sections de un (1) cours
+router.get('/materielDeCours/:id', (req, res) => {
+    const id = mongoose.Types.ObjectId(req.params.id)
+    coursSchema
+        .aggregate([
+            {
+                $match : { _id: id }
+            },
+            {
+                $lookup:
+                {
+                    from: "gestionmateriels",
+                    localField: "_id",
+                    foreignField: "idParentSection",
+                    as: "Materiels"
+                }
+            },
             {
                 $lookup: {
                     from: "sections",
