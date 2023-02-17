@@ -7,6 +7,7 @@ const categorieRoutes = require("./src/routes/categorie")
 const coursRoutes = require("./src/routes/cours")
 const sectionRoutes = require("./src/routes/section")
 const gestionMaterielRoutes = require("./src/routes/gestionMateriel")
+const inscriptionRoute = require("./src/routes/inscriptionRout")
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(categorieRoutes);
 app.use(coursRoutes);
 app.use(sectionRoutes);
 app.use(gestionMaterielRoutes);
+app.use('/inscription',inscriptionRoute);
 
 //Connection to DB Atlas
 mongoose.connect(URI)
