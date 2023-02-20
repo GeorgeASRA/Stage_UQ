@@ -13,7 +13,9 @@ const coursSchema = mongoose.Schema({
         type: String,
         required: true
     },
-
+    image: {
+        type: String
+    },
     prixNormal: {
         type: Number,
         default: 0

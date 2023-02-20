@@ -4,7 +4,7 @@ import { BiSearchAlt2 } from 'react-icons/bi'
 export function Navbar(){
     
     return(
-        <div className='container'>
+        <div className='container-fluid'>
             <div className="row">
                 <div className="col">
                     <img src={logo} width="200px" alt="Logo UQ"/>
