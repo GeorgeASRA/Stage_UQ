@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import AjouterNote from "../components/AjouterNote"
+import Modal from "../components/Modal/Modal";
 
 export function CoursEtMateriels (){
 
     const [cours, setCours] = useState([])
+    const [showAjouterNoteComponent, setShowAjouterNoteComponent] = useState(false);
+
 
     useEffect(() => {
         
@@ -51,6 +55,13 @@ export function CoursEtMateriels (){
                             <h5>Materiels</h5>
                         </div>
                         <div className="col-12">
+                            <button onClick={() => setShowAjouterNoteComponent(true)}>Ajouer un note </button> <br />
+                            <Modal title="Ajouter Note" onClose={() => setShowAjouterNoteComponent(false)} show={showAjouterNoteComponent}>
+                                 <AjouterNote/> 
+                                {/* <p>This is modal body</p> */}
+                            </Modal>
+                            {/* {showAjouterNoteComponent && <div><AjouterNote/></div>}                             
+                            <button>Ajouer un video</button> */}
                             <ul>
                                 {
                                     cours.map(item => {
