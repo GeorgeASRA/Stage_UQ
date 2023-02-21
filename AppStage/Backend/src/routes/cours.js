@@ -28,113 +28,12 @@ router.get('/listeDuCours', (req, res) => {
                         foreignField: "_id",
                         as: "nomCategorie"
                     }
-                },
-                //{ $match: { "nomCategorie.nom": "Informatiqe" }} //pour trouve juste cels qui sont d'informatique
+                }
             ]
         )
         .then((data) => res.json(data))
         .catch((error) => res.json({ message: error }))
 
-})
-
-//Liste Materiels du cours
-router.get('/listeMaterielsDuCours', (req, res) => {
-    coursSchema
-        .aggregate(
-            [
-                {
-                    $lookup:
-                    {
-                        from: "gestionmateriels",
-                        localField: "_id",
-                        foreignField: "idCours",
-                        as: "Materiels"
-                    }
-                },
-                { $match: { code:"L001" }}
-            ]
-        )
-        .then((data) => res.json(data))
-        .catch((error) => res.json({ message: error }))
-})
-
-//Liste Cours avec Section et Materiels
-router.get('/listeCoursMS', (req, res) => {
-    coursSchema
-        .aggregate([
-            {
-                $lookup:
-                {
-                    from: "gestionmateriels",
-                    localField: "_id",
-                    foreignField: "idParentSection",
-                    as: "Materiels"
-                }
-            },
-            /* { $match: { code:"L001" }}, */
-            {
-                $lookup: {
-                    from: "sections",
-                    as: "Sections",
-                    let: { idCours: "$_id" }, // _id is from Cours
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        {
-                                            $eq: [ "$idParent","$$idCours" ] //idParent is from sections
-                                        }
-                                    ]
-                                }
-                            }
-                        },
-                        {
-                            $lookup: {
-                                from: "sections",
-                                as: "SousSections",
-                                let: { typeSection: "Section" }, //Type de Section
-                                pipeline: [
-                                    {
-                                        $match: {
-                                            $expr: {
-                                                $and: [
-                                                    {
-                                                        $eq: [ "$typeParent", "$$typeSection" ] //idParentSections is from gestionmateriels table
-                                                    }
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: "gestionmateriels",
-                                            as: "Materiels",
-                                            let: { idSection: "$_id" }, //_id is from Sections
-                                            pipeline: [
-                                                {
-                                                    $match: {
-                                                        $expr: {
-                                                            $and: [
-                                                                {
-                                                                    $eq: [ "$idParentSection", "$$idSection" ] //idParentSections is from gestionmateriels table
-                                                                }
-                                                            ]
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            }
-        ])
-        .then((data) => res.json(data))
-        .catch((error) => res.json({ message: error }))
 })
 
 //Materiel et Sections de un (1) cours
@@ -148,6 +47,15 @@ router.get('/materielDeCours/:id', (req, res) => {
             {
                 $lookup:
                 {
+                    from: "categories",
+                    localField: "idCategorie",
+                    foreignField: "_id",
+                    as: "nomCategorie"
+                }
+            },
+            {
+                $lookup:
+                {
                     from: "gestionmateriels",
                     localField: "_id",
                     foreignField: "idParentSection",
@@ -171,18 +79,38 @@ router.get('/materielDeCours/:id', (req, res) => {
                                 }
                             }
                         },
-                        {
+                        {//Pour avoir le materiel d'une section sans SousSection
                             $lookup: {
-                                from: "sections",
-                                as: "SousSections",
-                                let: { typeSection: "Section" }, //Type de Section
+                                from: "gestionmateriels",
+                                as: "MaterielsSansSousSection",
+                                let: { idSection: "$_id" }, //_id is from Sections
                                 pipeline: [
                                     {
                                         $match: {
                                             $expr: {
                                                 $and: [
                                                     {
-                                                        $eq: [ "$typeParent", "$$typeSection" ] //idParentSections is from gestionmateriels table
+                                                        $eq: [ "$idParentSection", "$$idSection" ] //idParentSections is from gestionmateriels table
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "sections",
+                                as: "SousSections",
+                                let: { idSection: "$_id" }, //Type de Section
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    {
+                                                        $eq: [ "$idParent", "$$idSection" ] //idParentSections is from gestionmateriels table
                                                     }
                                                 ]
                                             }

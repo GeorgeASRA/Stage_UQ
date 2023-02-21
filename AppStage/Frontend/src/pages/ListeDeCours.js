@@ -17,7 +17,6 @@ export function ListeDeCours(){
         listeDeCours()
     },[])
 
-
     return(
         <div className='container-fluid'>
             <div className="row">
@@ -33,7 +32,7 @@ export function ListeDeCours(){
                     {
                         cours.map(cours => {
                             return(
-                                <CarteCours key={cours._id} nom={cours.nom} prixNormal={cours.prixNormal} description={cours.description} image={cours.image} categorie={cours.nomCategorie.map(c => c.nom)}/>
+                                <CarteCours key={cours._id} id={cours._id} nom={cours.nom} prixNormal={cours.prixNormal} description={cours.description} image={cours.image} categorie={cours.nomCategorie.map(c => c.nom)}/>
                             )
                         })
                     }
