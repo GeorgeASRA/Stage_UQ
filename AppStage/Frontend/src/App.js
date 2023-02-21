@@ -10,10 +10,11 @@ function App() {
   return (
     <div>
       <Navbar/>
-      <CoursEtMateriels/>
+      
       <Router>
           <Routes>
               <Route path='/listeDeCours' element={<ListeDeCours/>} />
+              <Route path='/materielDeCours/:id' element={<CoursEtMateriels/>}/>
           </Routes>
       </Router>
     </div>
