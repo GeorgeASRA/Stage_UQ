@@ -1,6 +1,6 @@
 import React from 'react';
 
-class AjouterNote extends React.Component {
+class AjouterMateriel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,6 +44,18 @@ class AjouterNote extends React.Component {
           <div>
             <label htmlFor="descriptionInput">Description:</label>
             <input type="text" id="descriptionInput" value={this.state.description} onChange={this.handleDescriptionChange} />
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="noteRadio"/>
+              <label class="form-check-label" for="noteRadio">
+                Note
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="flexRadioDefault" id="videoRadio" />
+              <label class="form-check-label" for="videoRadio">
+                Video
+              </label>
+            </div>
           </div>
           <button type="submit">Upload</button>
         </form>
@@ -52,4 +64,4 @@ class AjouterNote extends React.Component {
   }
 }
 
-export default AjouterNote;
+export default AjouterMateriel;

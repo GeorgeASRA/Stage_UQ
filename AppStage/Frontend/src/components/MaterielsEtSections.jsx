@@ -1,12 +1,19 @@
+import { useState, useEffect } from "react"
+import AjouterMateriel from "./AjouterMateriel";
+import Modal from "./Modal/Modal";
 
 export function MaterielsEtSections({cours}){
-
+    const [showAjouterMaterielComponent, setShowAjouterMaterielComponent] = useState(false);
     return(
         <div className="row">
             <div className="col-12 text-center mb-3">
                 <h5>Materiels</h5>
                 <button className="btn btn-secondary btn-sm me-2">Ajouter Seccion</button>
-                <button className="btn btn-secondary btn-sm">Ajouter Materiel</button>
+                <button className="btn btn-secondary btn-sm" onClick={() => setShowAjouterMaterielComponent(true)}>Ajouter Materiel</button>
+                <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponent(false)} show={showAjouterMaterielComponent}>
+                                 <AjouterMateriel/> 
+                                {/* <p>This is modal body</p> */}
+                            </Modal>
             </div>
             {
                 cours.map(section => {
