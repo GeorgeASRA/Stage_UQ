@@ -1,3 +1,5 @@
+import { GrEdit } from 'react-icons/gr'
+import { MdDeleteOutline } from 'react-icons/md'
 
 export function MaterielsEtSections({cours}){
 
@@ -8,6 +10,26 @@ export function MaterielsEtSections({cours}){
                 <button className="btn btn-secondary btn-sm me-2">Ajouter Seccion</button>
                 <button className="btn btn-secondary btn-sm">Ajouter Materiel</button>
             </div>
+            <table>
+                {
+                    cours.map((materiel) => {
+                        return(
+                            materiel.Materiels.map((m, i) => {
+                                return(
+                                    <tr key={i}>
+                                        <td>{m.description}</td>
+                                        <td className="text-muted">{m.dateAjoute.slice(0,10)}</td>
+                                        <td><a href="...">{m.lien}</a></td>
+                                        <td>{m.typeMateriel}</td>
+                                        <td><button className="btn btn-outline-warning btn-sm"><GrEdit/></button></td>
+                                        <td><butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto></td>
+                                    </tr>
+                                )
+                            })
+                        )
+                    })
+                }
+            </table>
             {
                 cours.map(section => {
                     return(
@@ -29,6 +51,8 @@ export function MaterielsEtSections({cours}){
                                                             <div className="col text-center text-muted">{ss.dateAjoute.slice(0,10)}</div>
                                                             <div className="col text-center"><a href="...">{ss.lien}</a></div>
                                                             <div className="col text-center">{ss.typeMateriel}</div>
+                                                            <div className='col'><button className="btn btn-outline-warning btn-sm"><GrEdit/></button></div>
+                                                            <div className='col'><butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto></div>
                                                         </div>
                                                     )
                                                 })}
@@ -46,6 +70,8 @@ export function MaterielsEtSections({cours}){
                                                                                 <div className="col text-center text-muted">{m.dateAjoute.slice(0,10)}</div>
                                                                                 <div className="col text-center"><a href="...">{m.lien}</a></div>
                                                                                 <div className="col text-center">{m.typeMateriel}</div>
+                                                                                <div className='col'><button className="btn btn-outline-warning btn-sm"><GrEdit/></button></div>
+                                                                                <div className='col'><butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto></div>
                                                                             </div>
                                                                         )
                                                                     })}
