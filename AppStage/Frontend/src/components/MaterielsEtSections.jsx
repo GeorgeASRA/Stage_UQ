@@ -1,14 +1,27 @@
 import { GrEdit } from 'react-icons/gr'
 import { MdDeleteOutline } from 'react-icons/md'
 
-export function MaterielsEtSections({cours}){
+import { useState, useEffect } from "react"
+import AjouterMateriel from "./AjouterMateriel";
+import Modal from "./Modal/Modal";
 
+import { GrEdit } from 'react-icons/gr'
+import { MdDeleteOutline } from 'react-icons/md'
+
+
+export function MaterielsEtSections({cours}){
+    const [showAjouterMaterielComponent, setShowAjouterMaterielComponent] = useState(false);
+    const [coursId, setCoursId] = useState(null);
     return(
         <div className="row">
             <div className="col-12 text-center mb-3">
                 <h5>Materiels</h5>
                 <button className="btn btn-secondary btn-sm me-2">Ajouter Seccion</button>
-                <button className="btn btn-secondary btn-sm">Ajouter Materiel</button>
+                <button className="btn btn-secondary btn-sm" onClick={() => setShowAjouterMaterielComponent(true)}>Ajouter Materiel</button>
+                <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponent(false)} show={showAjouterMaterielComponent}>
+                                 <AjouterMateriel coursId="63dae0d1e53230ab463663e9" parentSectionId="63dae0d1e53230ab463663e9" parentType="Cours"/> 
+                                {/* <p>This is modal body</p> */}
+                            </Modal>
             </div>
             <table>
                 {
