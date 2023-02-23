@@ -11,7 +11,7 @@ export function CoursEtMateriels (){
 
     useEffect(() => {
         listeDeMateriels()
-    })
+    }, [])
 
 
     const listeDeMateriels = async () => {

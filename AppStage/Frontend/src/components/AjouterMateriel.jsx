@@ -1,20 +1,26 @@
 import React from 'react';
+import axios from "axios";
 
 class AjouterMateriel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedFile: null,
-      description: ''
+      materialLink: null,
+      description: '',
+      materialType:'Note',
+      coursId: props.coursId,
+      parentSectionId: props.parentSectionId,
+      parentType: props.parentType
     };
-    this.handleFileChange = this.handleFileChange.bind(this);
+    this.handleMaterialLinkChange = this.handleMaterialLinkChange.bind(this);
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+    this.handleMaterialTypeChange = this.handleMaterialTypeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleFileChange(event) {
+  handleMaterialLinkChange(event) {
     this.setState({
-      selectedFile: event.target.files[0]
+      materialLink: event.target.value
     });
   }
 
@@ -24,40 +30,64 @@ class AjouterMateriel extends React.Component {
     });
   }
 
+  handleMaterialTypeChange(event) {
+    this.setState({
+      materialType: event.target.value
+    });
+    console.log('Material Type: ' + event.target.value);
+  }
+
+  createCourseMaterial(materialType, description, materialLink, coursId, parentSectionId, parentType) {
+    const material = {      
+      typeMateriel: materialType,
+      description: description,
+      idCours: coursId,
+      lien: materialLink,
+      idParentSection: parentSectionId,
+      typeParent: parentType
+    }
+
+    axios.post("http://localhost:5000/ajouterMateriel", material)
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
+
   handleSubmit(event) {
     event.preventDefault();
-    const formData = new FormData();
-    formData.append('file', this.state.selectedFile);
-    formData.append('description', this.state.description);
-    // Here you can make a request to upload the file and its description to the server using axios, fetch or other libraries
-    console.log(formData);
+    this.createCourseMaterial(this.state.materialType, this.state.description, this.state.materialLink, this.state.coursId, this.state.parentSectionId, this.state.parentType)
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
-          <div>
-            <label htmlFor="fileInput">Choose file to upload:</label>
-            <input type="file" id="fileInput" onChange={this.handleFileChange} />
+          <div className="form-group">
+            <label htmlFor="lienDeMateriel">Lien de materiel</label>
+            <input className="form-control" id="lienDeMateriel" placeholder="Entrez le lien de materiel" onChange={this.handleMaterialLinkChange}/>
           </div>
-          <div>
-            <label htmlFor="descriptionInput">Description:</label>
-            <input type="text" id="descriptionInput" value={this.state.description} onChange={this.handleDescriptionChange} />
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="noteRadio"/>
-              <label class="form-check-label" for="noteRadio">
-                Note
-              </label>
+          <div className="input-group">
+            <div className="input-group-prepend">
+              <span className="input-group-text">Description</span>
             </div>
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="flexRadioDefault" id="videoRadio" />
-              <label class="form-check-label" for="videoRadio">
-                Video
-              </label>
-            </div>
+            <textarea className="form-control" aria-label="With textarea" value={this.state.description} onChange={this.handleDescriptionChange}></textarea>
           </div>
-          <button type="submit">Upload</button>
+          <div className="form-check">
+            <input className="form-check-input" type="radio" name="typeDeMateriel" id="noteRadio" value='Note' onChange={this.handleMaterialTypeChange}/>
+            <label className="form-check-label" htmlFor="noteRadio">
+              Note
+            </label>
+          </div>
+          <div className="form-check">
+            <input className="form-check-input" type="radio" name="typeDeMateriel" id="videoRadio" value='Video' onChange={this.handleMaterialTypeChange}/>
+            <label className="form-check-label" htmlFor="videoRadio">
+              Video
+            </label>
+          </div>
+          <button type="submit">Ajouter Materiel</button>
         </form>
       </div>
     );
