@@ -67,7 +67,7 @@ class AjouterMateriel extends React.Component {
     axios.post("http://localhost:5000/ajouterMateriel", material)
       .then(response => {
         console.log(response.data);
-        if (response.data !== null && response.data.message !== null && response.data.message.errors !== null && response.data.message.errors.description != null) {
+        if (response.data != null && response.data.message != null && response.data.message.errors != null && response.data.message.errors.description != null) {
           this.showFailedAlert(response.data.message.errors.description.message);
         } else {
           this.showSuccessAlert();
