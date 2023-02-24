@@ -4,6 +4,7 @@ import { MdDeleteOutline } from 'react-icons/md'
 import { useState, useEffect } from "react"
 import AjouterMateriel from "./AjouterMateriel";
 import Modal from "./Modal/Modal";
+import AjouterSection from './AjouterSection';
 
 //import { GrEdit } from 'react-icons/gr'
 //import { MdDeleteOutline } from 'react-icons/md'
@@ -13,13 +14,24 @@ export function MaterielsEtSections({cours}){
     const [sectionId, setSectionId] = useState(null);
     const [showAjouterMaterielComponentCoursParent, setShowAjouterMaterielComponentCoursParent] = useState(false);
     const [showAjouterMaterielComponentSectionParent, setShowAjouterMaterielComponentSectionParent] = useState(false);
+    const [showAjouterSectionComponentCoursParent, setShowAjouterSectionComponentCoursParent] = useState(false);
+    const [showAjouterSectionComponentSectionParent, setShowAjouterSectionComponentSectionParent] = useState(false);
+
 
     return(
         <div className="row">
             <div className="col-12 text-center mb-3">
                 <h5>Materiels</h5>
-                <button className="btn btn-secondary btn-sm me-2">Ajouter Seccion</button>
-                <button className="btn btn-secondary btn-sm" onClick={(event) => setShowAjouterMaterielComponentCoursParent(true)}>Ajouter Materiel</button>
+                <button className="btn btn-secondary btn-sm me-2" onClick={() => setShowAjouterSectionComponentCoursParent(true)}>Ajouter Section</button>
+                <Modal title="Ajouter Section" onClose={() => setShowAjouterSectionComponentCoursParent(false)} show={showAjouterSectionComponentCoursParent}>
+                    {
+                        cours.map((c) => {
+                            return(
+                                <AjouterSection coursId={c._id} parentSectionId={c._id} parentType="Cours"/>
+                        )}) 
+                    }
+                </Modal>
+                <button className="btn btn-secondary btn-sm" onClick={() => setShowAjouterMaterielComponentCoursParent(true)}>Ajouter Materiel</button>
                 <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponentCoursParent(false)} show={showAjouterMaterielComponentCoursParent}>
                     {
                         cours.map((c) => {
@@ -60,7 +72,11 @@ export function MaterielsEtSections({cours}){
                             return(
                                 <div id={i} className="col-12">
                                     <div className="bg-warning mt-4">{item.titreSection}
-                                    <button className="btn btn-secondary btn-sm me-2 ms-2" >Ajouter Section</button>
+                                    <button id={item._id} className="btn btn-secondary btn-sm me-2 ms-2" onClick={(event) => {setShowAjouterSectionComponentSectionParent(true); setSectionId(event.target.id)}}>Ajouter Section</button>
+                                    <Modal title="Ajouter Section" onClose={() => setShowAjouterSectionComponentSectionParent(false)} show={showAjouterSectionComponentSectionParent}>            
+                                                    <AjouterSection coursId={c._id} parentSectionId={sectionId} parentType="Section"/>
+                                    </Modal>
+
                                     <button id={item._id} className="btn btn-secondary btn-sm" onClick={(event) => {setShowAjouterMaterielComponentSectionParent(true); setSectionId(event.target.id)}}>Ajouter Materiel</button></div>
                                     <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponentSectionParent(false)} show={showAjouterMaterielComponentSectionParent}>            
                                                     <AjouterMateriel coursId={c._id} parentSectionId={sectionId} parentType="Section"/>
