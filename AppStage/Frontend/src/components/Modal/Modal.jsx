@@ -10,6 +10,11 @@ const Modal = props => {
     }
   };
 
+  const handleClose = () => {
+    props.onClose();
+    window.location.reload(); // Refresh the page
+  };
+
   useEffect(() => {
     document.body.addEventListener("keydown", closeOnEscapeKeyDown);
     return function cleanup() {
@@ -30,7 +35,7 @@ const Modal = props => {
           </div>
           <div className="modal-body">{props.children}</div>
           <div className="modal-footer">
-            <button onClick={props.onClose} className="button">
+            <button onClick={handleClose} className="button">
               Close
             </button>
           </div>
