@@ -1,7 +1,11 @@
 import React from 'react';
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 class AjouterMateriel extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +20,19 @@ class AjouterMateriel extends React.Component {
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
     this.handleMaterialTypeChange = this.handleMaterialTypeChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+
+  showSuccessAlert() {
+    toast.success('Insertion du matériel réussie!', {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  }
+
+  showFailedAlert(errorMessage) {
+    toast.error('Insertion du matériel a échoué! voici erreur = ' + errorMessage , {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
 
   handleMaterialLinkChange(event) {
@@ -50,9 +67,16 @@ class AjouterMateriel extends React.Component {
     axios.post("http://localhost:5000/ajouterMateriel", material)
       .then(response => {
         console.log(response.data);
+        if (response.data !== null && response.data.message !== null && response.data.message.errors !== null && response.data.message.errors.description != null) {
+          this.showFailedAlert(response.data.message.errors.description.message);
+        } else {
+          this.showSuccessAlert();
+        }
+        
       })
       .catch(error => {
         console.error(error);
+        this.showFailedAlert(error);
       });
   }
 
@@ -89,6 +113,7 @@ class AjouterMateriel extends React.Component {
           </div>
           <button type="submit">Ajouter Materiel</button>
         </form>
+        <ToastContainer />
       </div>
     );
   }
