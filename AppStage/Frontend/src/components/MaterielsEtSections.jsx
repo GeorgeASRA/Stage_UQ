@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import AjouterMateriel from "./AjouterMateriel";
 import Modal from "./Modal/Modal";
 import AjouterSection from './AjouterSection';
+import axios from "axios";
 
 //import { GrEdit } from 'react-icons/gr'
 //import { MdDeleteOutline } from 'react-icons/md'
@@ -17,6 +18,18 @@ export function MaterielsEtSections({cours}){
     const [showAjouterSectionComponentCoursParent, setShowAjouterSectionComponentCoursParent] = useState(false);
     const [showAjouterSectionComponentSectionParent, setShowAjouterSectionComponentSectionParent] = useState(false);
 
+      function handleClick(buttonId) {
+        //const buttonId = event.target.id;
+        console.log(`Clicked button with id: ${buttonId}`);
+        axios.delete("http://localhost:5000/materiel/" + buttonId)
+      .then(() => {          
+        window.location.reload(); // Refresh the page
+        })
+      .catch(error => {
+        console.error(error);
+        alert(error);
+      });
+      }
 
     return(
         <div className="row">
@@ -55,7 +68,7 @@ export function MaterielsEtSections({cours}){
                                             <td>{m.typeMateriel}</td>
                                             <td>
                                                 <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                                <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
+                                                <button id={m._id} className="btn btn-danger btn-sm" onClick={() => handleClick(m._id)}><MdDeleteOutline/></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -95,7 +108,7 @@ export function MaterielsEtSections({cours}){
                                                             <div className="col text-center">{ss.typeMateriel}</div>
                                                             <div className='col'>
                                                                 <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                                                <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
+                                                                <button id={ss._id} className="btn btn-danger btn-sm" onClick={() => handleClick(ss._id)}><MdDeleteOutline/></button>
                                                             </div>
                                                         </div>
                                                     )
@@ -120,7 +133,7 @@ export function MaterielsEtSections({cours}){
                                                                                 <div className="col text-center">{m.typeMateriel}</div>
                                                                                 <div className='col'>
                                                                                     <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                                                                    <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
+                                                                                    <button id={m._id} className="btn btn-danger btn-sm" onClick={() => handleClick(m._id)}><MdDeleteOutline/></button>
                                                                                 </div>
                                                                             </div>
                                                                         )
