@@ -20,5 +20,13 @@ router.get('/materiel/:id', (req, res) => {
         .then((data) => res.json(data))
         .catch((error) => res.json({message: error}))
 })
+//Delete Materiel
+router.delete('/materiel/:id', (req, res) => {
+    const id = req.params.id;
+    gestionMaterielSchema.findByIdAndRemove(id)
+
+         .then((data) => res.json(data))
+        .catch((error) => res.json({message: error}))
+})
 
 module.exports = router;
