@@ -9,7 +9,7 @@ export function Navbar(){
                 <div className="col">
                     <img src={logo} width="200px" alt="Logo UQ"/>
                 </div>
-                <div className="col">
+                <div className="col d-none d-sm-block">
                     <form className='d-flex mt-4'>
                         <input className='form-control' type="text" placeholder='Rechercher un cours'/>
                         <button className='btn btn-dark'><BiSearchAlt2/></button>

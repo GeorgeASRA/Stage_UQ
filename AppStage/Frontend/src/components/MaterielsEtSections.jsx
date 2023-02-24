@@ -62,9 +62,9 @@ export function MaterielsEtSections({cours}){
                                 return(
                                     <tbody>
                                         <tr key={i}>
-                                            <td>{m.description}</td>
-                                            <td className="text-muted">{m.dateAjoute.slice(0,10)}</td>
-                                            <td><a href="...">{m.lien}</a></td>
+                                            <td><a href={m.lien}>{m.description}</a></td>
+                                            <td className="text-muted d-none d-sm-block">{m.dateAjoute.slice(0,10)}</td>
+                                            {/* <td><a href="...">{m.lien}</a></td> */}
                                             <td>{m.typeMateriel}</td>
                                             <td>
                                                 <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
@@ -83,7 +83,7 @@ export function MaterielsEtSections({cours}){
                     return(
                         c.Sections.map((item, i) => {
                             return(
-                                <div id={i} className="col-12">
+                                <div id={i} className="col-12 table">
                                     <div className="bg-warning mt-4">{item.titreSection}
                                     <button id={item._id} className="btn btn-secondary btn-sm me-2 ms-2" onClick={(event) => {setShowAjouterSectionComponentSectionParent(true); setSectionId(event.target.id)}}>Ajouter Section</button>
                                     <Modal title="Ajouter Section" onClose={() => setShowAjouterSectionComponentSectionParent(false)} show={showAjouterSectionComponentSectionParent}>            
@@ -95,16 +95,14 @@ export function MaterielsEtSections({cours}){
                                                     <AjouterMateriel coursId={c._id} parentSectionId={sectionId} parentType="Section"/>
                                     </Modal>
                                     <div className="row">
-                                        <div className="col-12">
-                                        </div>
                                         <div className="col">
                                             {/* Materiels dans une section */}
                                             <div>{item.MaterielsSansSousSection.map((ss, i) => {
                                                     return(
                                                         <div className="row mt-3 ms-2" key={i}>
-                                                            <div className="col-3">{ss.description}</div>
-                                                            <div className="col text-center text-muted">{ss.dateAjoute.slice(0,10)}</div>
-                                                            <div className="col text-center"><a href="...">{ss.lien}</a></div>
+                                                            <div className="col-3"><a href={ss.lien}>{ss.description}</a></div>
+                                                            <div className="col text-center text-muted d-none d-sm-block">{ss.dateAjoute.slice(0,10)}</div>
+                                                            {/* <div className="col text-center"><a href="...">{ss.lien}</a></div> */}
                                                             <div className="col text-center">{ss.typeMateriel}</div>
                                                             <div className='col'>
                                                                 <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
@@ -127,9 +125,9 @@ export function MaterielsEtSections({cours}){
                                                                 <div>{ss.Materiels.map((m, i) => {
                                                                         return(
                                                                             <div className="row mt-3" key={i}>
-                                                                                <div className="col-3">{m.description}</div>
-                                                                                <div className="col text-center text-muted">{m.dateAjoute.slice(0,10)}</div>
-                                                                                <div className="col text-center"><a href="...">{m.lien}</a></div>
+                                                                                <div className="col"><a href={m.lien}>{m.description}</a></div>
+                                                                                <div className="col text-center text-muted d-none d-sm-block">{m.dateAjoute.slice(0,10)}</div>
+                                                                                {/* <div className="col text-center"><a href="...">{m.lien}</a></div> */}
                                                                                 <div className="col text-center">{m.typeMateriel}</div>
                                                                                 <div className='col'>
                                                                                     <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
