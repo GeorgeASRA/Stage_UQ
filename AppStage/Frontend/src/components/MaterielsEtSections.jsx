@@ -5,23 +5,29 @@ import { useState, useEffect } from "react"
 import AjouterMateriel from "./AjouterMateriel";
 import Modal from "./Modal/Modal";
 
-import { GrEdit } from 'react-icons/gr'
-import { MdDeleteOutline } from 'react-icons/md'
+//import { GrEdit } from 'react-icons/gr'
+//import { MdDeleteOutline } from 'react-icons/md'
 
 
 export function MaterielsEtSections({cours}){
-    const [showAjouterMaterielComponent, setShowAjouterMaterielComponent] = useState(false);
-    const [coursId, setCoursId] = useState(null);
+    const [sectionId, setSectionId] = useState(null);
+    const [showAjouterMaterielComponentCoursParent, setShowAjouterMaterielComponentCoursParent] = useState(false);
+    const [showAjouterMaterielComponentSectionParent, setShowAjouterMaterielComponentSectionParent] = useState(false);
+
     return(
         <div className="row">
             <div className="col-12 text-center mb-3">
                 <h5>Materiels</h5>
                 <button className="btn btn-secondary btn-sm me-2">Ajouter Seccion</button>
-                <button className="btn btn-secondary btn-sm" onClick={() => setShowAjouterMaterielComponent(true)}>Ajouter Materiel</button>
-                <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponent(false)} show={showAjouterMaterielComponent}>
-                                 <AjouterMateriel coursId="63dae0d1e53230ab463663e9" parentSectionId="63dae0d1e53230ab463663e9" parentType="Cours"/> 
-                                {/* <p>This is modal body</p> */}
-                            </Modal>
+                <button className="btn btn-secondary btn-sm" onClick={(event) => setShowAjouterMaterielComponentCoursParent(true)}>Ajouter Materiel</button>
+                <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponentCoursParent(false)} show={showAjouterMaterielComponentCoursParent}>
+                    {
+                        cours.map((c) => {
+                            return(
+                                <AjouterMateriel coursId={c._id} parentSectionId={c._id} parentType="Cours"/>
+                        )}) 
+                    }
+                </Modal>
             </div>
             <table>
                 {
@@ -29,16 +35,18 @@ export function MaterielsEtSections({cours}){
                         return(
                             materiel.Materiels.map((m, i) => {
                                 return(
-                                    <tr key={i}>
-                                        <td>{m.description}</td>
-                                        <td className="text-muted">{m.dateAjoute.slice(0,10)}</td>
-                                        <td><a href="...">{m.lien}</a></td>
-                                        <td>{m.typeMateriel}</td>
-                                        <td>
-                                            <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                            <butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto>
-                                        </td>
-                                    </tr>
+                                    <tbody>
+                                        <tr key={i}>
+                                            <td>{m.description}</td>
+                                            <td className="text-muted">{m.dateAjoute.slice(0,10)}</td>
+                                            <td><a href="...">{m.lien}</a></td>
+                                            <td>{m.typeMateriel}</td>
+                                            <td>
+                                                <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
+                                                <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                 )
                             })
                         )
@@ -46,14 +54,17 @@ export function MaterielsEtSections({cours}){
                 }
             </table>
             {
-                cours.map(section => {
+                cours.map(c => {
                     return(
-                        section.Sections.map((item, i) => {
+                        c.Sections.map((item, i) => {
                             return(
-                                <div key={i} className="col-12">
+                                <div id={i} className="col-12">
                                     <div className="bg-warning mt-4">{item.titreSection}
-                                    <button className="btn btn-secondary btn-sm me-2 ms-2">Ajouter Section</button>
-                                    <button className="btn btn-secondary btn-sm">Ajouter Materiel</button></div>
+                                    <button className="btn btn-secondary btn-sm me-2 ms-2" >Ajouter Section</button>
+                                    <button id={item._id} className="btn btn-secondary btn-sm" onClick={(event) => {setShowAjouterMaterielComponentSectionParent(true); setSectionId(event.target.id)}}>Ajouter Materiel</button></div>
+                                    <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponentSectionParent(false)} show={showAjouterMaterielComponentSectionParent}>            
+                                                    <AjouterMateriel coursId={c._id} parentSectionId={sectionId} parentType="Section"/>
+                                    </Modal>
                                     <div className="row">
                                         <div className="col-12">
                                         </div>
@@ -68,7 +79,7 @@ export function MaterielsEtSections({cours}){
                                                             <div className="col text-center">{ss.typeMateriel}</div>
                                                             <div className='col'>
                                                                 <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                                                <butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto>
+                                                                <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
                                                             </div>
                                                         </div>
                                                     )
@@ -77,7 +88,11 @@ export function MaterielsEtSections({cours}){
                                             {/* Sections */}
                                             <div className="ms-3">{item.SousSections.map((ss, i) => {
                                                     return(
-                                                        <div key={i}><hr/><b>{ss.titreSection} <button className="btn btn-secondary btn-sm ms-2">Ajouter materiel</button></b>
+                                                        <div key={i}><hr/><b>{ss.titreSection} 
+                                                            <button id={ss._id} className="btn btn-secondary btn-sm ms-2" onClick={(event) => {setShowAjouterMaterielComponentSectionParent(true); setSectionId(event.target.id)}}>Ajouter materiel</button></b>
+                                                            <Modal title="Ajouter Materiel" onClose={() => setShowAjouterMaterielComponentSectionParent(false)} show={showAjouterMaterielComponentSectionParent}>            
+                                                                <AjouterMateriel coursId={c._id} parentSectionId={sectionId} parentType="Section"/>
+                                                            </Modal>
                                                             <div className="col ms-3">
                                                                 {/* Materiels d'une section */}
                                                                 <div>{ss.Materiels.map((m, i) => {
@@ -89,7 +104,7 @@ export function MaterielsEtSections({cours}){
                                                                                 <div className="col text-center">{m.typeMateriel}</div>
                                                                                 <div className='col'>
                                                                                     <button className="btn btn-outline-warning btn-sm me-2"><GrEdit/></button>
-                                                                                    <butto className="btn btn-danger btn-sm"><MdDeleteOutline/></butto>
+                                                                                    <button className="btn btn-danger btn-sm"><MdDeleteOutline/></button>
                                                                                 </div>
                                                                             </div>
                                                                         )
