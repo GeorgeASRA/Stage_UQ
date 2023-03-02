@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { CarteCours } from "../components/CarteCours"
+import { BoutonsSidebar } from '../components/BoutonsSidebar';
 
 export function ListeDeCours(){
 
@@ -19,16 +20,17 @@ export function ListeDeCours(){
 
     return(
         <div className='container-fluid'>
-            <div className="row">
-                <div className="offset-md-3 col text-center ">
-                    <h3 className='mt-3 mb-5'>Liste de cours</h3>
-                </div>
-            </div>
+            
             <div className="row">
                 <div className="col-2 d-none d-md-block">
-
+                    <BoutonsSidebar/>
                 </div>
                 <div className="col">
+                    <div className="row">
+                        <div className=" col text-center ">
+                            <h3 className='mt-3 mb-5'>Liste de cours</h3>
+                        </div>
+                    </div>
                     {
                         cours.map(cours => {
                             return(

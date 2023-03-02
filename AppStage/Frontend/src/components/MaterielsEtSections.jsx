@@ -1,7 +1,7 @@
 import { GrEdit } from 'react-icons/gr'
 import { MdDeleteOutline } from 'react-icons/md'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import AjouterMateriel from "./AjouterMateriel";
 import Modal from "./Modal/Modal";
 import AjouterSection from './AjouterSection';
@@ -38,9 +38,9 @@ export function MaterielsEtSections({cours}){
                 <button className="btn btn-secondary btn-sm me-2" onClick={() => setShowAjouterSectionComponentCoursParent(true)}>Ajouter Section</button>
                 <Modal title="Ajouter Section" onClose={() => setShowAjouterSectionComponentCoursParent(false)} show={showAjouterSectionComponentCoursParent}>
                     {
-                        cours.map((c) => {
+                        cours.map((c, i) => {
                             return(
-                                <AjouterSection coursId={c._id} parentSectionId={c._id} parentType="Cours"/>
+                                <AjouterSection key={i} coursId={c._id} parentSectionId={c._id} parentType="Cours"/>
                         )}) 
                     }
                 </Modal>

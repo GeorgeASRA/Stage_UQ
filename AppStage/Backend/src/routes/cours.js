@@ -15,6 +15,7 @@ router.post('/createCours', (req, res) => {
         .catch((error) => res.json({ message: error }));
 })
 
+
 //Liste de cours
 router.get('/listeDuCours', (req, res) => {
     coursSchema

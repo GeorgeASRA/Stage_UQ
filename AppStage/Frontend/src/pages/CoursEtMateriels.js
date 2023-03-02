@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { MaterielsEtSections } from "../components/MaterielsEtSections"
 import { useParams } from "react-router-dom"
+import { BoutonsSidebar } from "../components/BoutonsSidebar"
 
 export function CoursEtMateriels (){
 
@@ -11,7 +12,7 @@ export function CoursEtMateriels (){
 
     useEffect(() => {
         listeDeMateriels()
-    }, [])
+    })
 
 
     const listeDeMateriels = async () => {
@@ -23,7 +24,7 @@ export function CoursEtMateriels (){
         <div className="container-fluid">
             <div className="row">
                 <div className="col-2 d-none d-md-block">
-
+                    <BoutonsSidebar/>
                 </div>
                 <div className="col">
                     {
